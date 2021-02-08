@@ -1,0 +1,207 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Producto index{% endblock %}
+
+{% block body %}
+    <h1>Lista de Productos</h1>
+    <div style="float:left;padding-bottom: 10px">
+        <a href="{{ path('product_new') }}">
+            <button class="btn btn-info"><i class="fa fa-plus"></i> Nuevo</button>
+        </a>
+        <a href="{{ path('product_export') }}">
+            <button class="btn btn-success"><i class="fa fa-file-excel-o"></i> Exportar Excel</button>
+        </a>
+    </div>
+    <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+        <tr>
+            {% if pager.sort_field == 'code' %}
+                <th class="sorted {% if pager.sort_order == 'ASC' %}ascending{% else %}descending{% endif %}">
+                    <a href="{{ path('product_list', {'sort': pager.sort_reverse}) }}">{{ 'Code ' }}
+                        <i class="fa fa-angle-double-{% if pager.sort_order == 'ASC' %}up{% else %}down{% endif %}"></i>
+                    </a>
+                </th>
+            {% else %}
+                <th>
+                    <a href="{{ path('product_list', {'sort': 'code.asc'}) }}">{{ 'Code' }}</a>
+                </th>
+            {% endif %}
+            {% if pager.sort_field == 'name' %}
+                <th class="sorted {% if pager.sort_order == 'ASC' %}ascending{% else %}descending{% endif %}">
+                    <a href="{{ path('product_list', {'sort': pager.sort_reverse}) }}">{{ 'Name' }}
+                        <i class="fa fa-angle-double-{% if pager.sort_order == 'ASC' %}up{% else %}down{% endif %}"></i>
+                    </a>
+                </th>
+            {% else %}
+                <th>
+                    <a href="{{ path('product_list', {'sort': 'name.asc'}) }}">{{ 'Name' }}</a>
+                </th>
+            {% endif %}
+            {% if pager.sort_field == 'description' %}
+                <th class="sorted {% if pager.sort_order == 'ASC' %}ascending{% else %}descending{% endif %}">
+                    <a href="{{ path('product_list', {'sort': pager.sort_reverse}) }}">{{ 'Description' }}
+                        <i class="fa fa-angle-double-{% if pager.sort_order == 'ASC' %}up{% else %}down{% endif %}"></i>
+                    </a>
+                </th>
+            {% else %}
+                <th>
+                    <a href="{{ path('product_list', {'sort': 'description.asc'}) }}">{{ 'Description' }}</a>
+                </th>
+            {% endif %}
+            {% if pager.sort_field == 'brand' %}
+                <th class="sorted {% if pager.sort_order == 'ASC' %}ascending{% else %}descending{% endif %}">
+                    <a href="{{ path('product_list', {'sort': pager.sort_reverse}) }}">{{ 'Brand' }}
+                        <i class="fa fa-angle-double-{% if pager.sort_order == 'ASC' %}up{% else %}down{% endif %}"></i>
+                    </a>
+                </th>
+            {% else %}
+                <th>
+                    <a href="{{ path('product_list', {'sort': 'brand.asc'}) }}">{{ 'Brand' }}</a>
+                </th>
+            {% endif %}
+            {% if pager.sort_field == 'category' %}
+                <th class="sorted {% if pager.sort_order == 'ASC' %}ascending{% else %}descending{% endif %}">
+                    <a href="{{ path('product_list', {'sort': pager.sort_reverse}) }}">{{ 'Category  ' }}
+                        <i class="fa fa-angle-double-{% if pager.sort_order == 'ASC' %}up{% else %}down{% endif %}"></i>
+                    </a>
+                </th>
+            {% else %}
+                <th>
+                    <a href="{{ path('product_list', {'sort': 'category.asc'}) }}">{{ 'Category  ' }}</a>
+                </th>
+            {% endif %}
+            {% if pager.sort_field == 'price' %}
+                <th class="sorted {% if pager.sort_order == 'ASC' %}ascending{% else %}descending{% endif %}">
+                    <a href="{{ path('product_list', {'sort': pager.sort_reverse}) }}">{{ 'Price  ' }}
+                        <i class="fa fa-angle-double-{% if pager.sort_order == 'ASC' %}up{% else %}down{% endif %}"></i>
+                    </a>
+                </th>
+            {% else %}
+                <th>
+                    <a href="{{ path('product_list', {'sort': 'price.asc'}) }}">{{ 'Price  ' }}</a>
+                </th>
+            {% endif %}
+            {% if pager.sort_field == 'createdAt' %}
+                <th class="sorted {% if pager.sort_order == 'ASC' %}ascending{% else %}descending{% endif %}">
+                    <a href="{{ path('product_list', {'sort': pager.sort_reverse}) }}">{{ 'createdAt  ' }}
+                        <i class="fa fa-angle-double-{% if pager.sort_order == 'ASC' %}up{% else %}down{% endif %}"></i>
+                    </a>
+                </th>
+            {% else %}
+                <th>
+                    <a href="{{ path('product_list', {'sort': 'createdAt.asc'}) }}">{{ 'createdAt' }}</a>
+                </th>
+            {% endif %}
+            {% if pager.sort_field == 'updatedAt' %}
+                <th class="sorted {% if pager.sort_order == 'ASC' %}ascending{% else %}descending{% endif %}">
+                    <a href="{{ path('product_list', {'sort': pager.sort_reverse}) }}">{{ 'updatedAt  '}}
+                        <i class="fa fa-angle-double-{% if pager.sort_order == 'ASC' %}up{% else %}down{% endif %}"></i>
+                    </a>
+                </th>
+            {% else %}
+                <th>
+                    <a href="{{ path('product_list', {'sort': 'updatedAt.asc'}) }}">{{ 'updatedAt  ' }}</a>
+                </th>
+            {% endif %}
+            <th style="width:165px;">Actions</th>
+        </tr>
+        <form method="get">
+            <tr>
+                <th>
+                    <input type="text" name="filter[code]"
+                           value="{% if pager.filter.code is defined %}{{ pager.filter.code }}{% endif%}"
+                           onchange="this.form.submit();" style="width:100%" />
+                </th>
+                <th>
+                    <input type="text" name="filter[name]"
+                           value="{% if pager.filter.name is defined %}{{ pager.filter.name }}{% endif%}"
+                           onchange="this.form.submit();" style="width:100%" />
+                </th>
+                <th>
+                    <input type="text" name="filter[description]"
+                           value="{% if pager.filter.description is defined %}{{ pager.filter.description }}{% endif%}"
+                           onchange="this.form.submit();" style="width:100%" />
+                </th>
+                <th>
+                    <input type="text" name="filter[brand]"
+                           value="{% if pager.filter.brand is defined %}{{ pager.filter.brand }}{% endif%}"
+                           onchange="this.form.submit();" style="width:100%" />
+                </th>
+                <th>
+                    <select name="filter[category]" onchange="this.form.submit();">
+                        <option value="">Todas</option>
+                        {% for category in categories %}
+                            {% if category.getId() is defined and not null %}
+                                <option value="{{ category.getId() }}"
+                                            {% if pager.filter.category is defined and pager.filter.category == category.getId() %}
+                                        {{ 'selected="selected"' }}
+                                    {% endif%}>  {{ category.getName() }}</option>
+                            {% endif%}>
+                        {% endfor %}
+                    </select>
+                </th>
+                <th>
+                    <input type="text" name="filter[price]"
+                           value="{% if pager.filter.price is defined %}{{ pager.filter.price }}{% endif%}"
+                           onchange="this.form.submit();" style="width:100%" />
+                </th>
+                <th></th>
+            </tr>
+            <input type="hidden" name="sort" value="{{ pager.sort }}" />
+        </form>
+        </thead>
+        <tbody>
+        {% for product in products %}
+            <tr>
+                <td>{{ product.code }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.description }}</td>
+                <td>{{ product.brand }}</td>
+                <td>{{ product.category }}</td>
+                <td>{{ product.price }}</td>
+                <td>{{ product.createdAt ? product.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ product.updatedAt ? product.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('product_show', {'id': product.id}) }}">
+                        <button class="btn btn-secondary"><i class="fa fa-eye"></i></button>
+                    </a>
+                    <a href="{{ path('product_edit', {'id': product.id}) }}">
+                        <button class="btn btn-primary"><i class="fa fa-pencil-square-o"></i></button>
+                    </a>
+                    <a href="{{ path('product_delete', {'id': product.id}) }}">
+                        {{ include('product/_delete_form.html.twig') }}
+                    </a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+    {% if pager.total_pages > 1 %}
+        <nav>
+            <ul class="pagination">
+                {%if pager.current_page > 1  %}
+                    <li class="page-item">
+                        <a class="page-link"  href="{{ path('product_list', {'page': pager.current_page-1 < 1 ? 1 : pager.current_page-1,  'sort': pager.sort , 'filter': pager.filter}) }}">Anterior</a>
+                    </li>
+                {% endif %}
+                {% for i in 1..pager.total_pages %}
+                    <li class="page-item {% if pager.current_page == i %}active {% endif %}">
+                        <a class="page-link"  href="{{ path('product_list', {'page': i, 'sort': pager.sort, 'filter': pager.filter }) }}">{{ i }}</a>
+                    </li>
+                {% endfor %}
+                {%if pager.current_page < pager.total_pages %}
+                    <li class="page-item">
+                        <a class="page-link"  href="{{ path('product_list', {'page': pager.current_page+1 <= pager.total_pages ? pager.current_page+1 : pager.current_page, 'sort': pager.sort, 'filter': pager.filter}) }}">Siguiente</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+
+{% endblock %}
