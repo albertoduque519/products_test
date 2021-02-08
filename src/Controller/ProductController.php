@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controller;
+
 use App\Entity\Product;
 use App\Entity\Category;
 use App\Form\ProductType;
@@ -34,7 +35,7 @@ class ProductController extends AbstractController
         $sheet->getCell('C1')->setValue('Description');
         $sheet->getCell('D1')->setValue('brand');
         $sheet->getCell('E1')->setValue('price');
-        $sheet->fromArray($this->getData(),'', 'A2', true);
+        $sheet->fromArray($this->getData(), '', 'A2', true);
 
         $writer = new Xlsx($spreadsheet);
         header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -111,7 +112,7 @@ class ProductController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('product_index');
+        return $this->redirectToRoute('product_list');
     }
 
     /**
@@ -122,7 +123,7 @@ class ProductController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $gridFunciones->init(Product::class, 5, 'code.asc');
 
-        return $this->render('product/list.html.twig',[
+        return $this->render('product/list.html.twig', [
             'products'   => $gridFunciones->getRecords(),
             'pager'      => $gridFunciones->getDisplayParameters(),
             'categories' => $em->getRepository(Category::class)->findAllOrder()
@@ -149,5 +150,4 @@ class ProductController extends AbstractController
         }
         return $list;
     }
-
 }
